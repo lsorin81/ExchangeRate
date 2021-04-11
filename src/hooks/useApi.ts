@@ -1,7 +1,5 @@
+import {useEffect, useState, useCallback} from 'react';
 import axios from 'axios';
-import {useEffect, useState} from 'react';
-
-const {CancelToken} = axios;
 
 /**
  * The object returned by the useAPI hook.
@@ -34,18 +32,18 @@ const {CancelToken} = axios;
  *
  * @param {string} url - URL that the API call is made to.
  * @param {Object} config={} - Axios config object passed to the axios.request method.
- * @param {boolean} initialFetch=true - Should the first api call automatically be made.
  * @returns {useAPIOutput} output
  */
-function useAPI(url, config = {}, initialFetch = true) {
+
+const useAPI = (url: string, config = {}) => {
   const [state, setState] = useState({
     response: undefined,
     error: undefined,
     isLoading: true,
   });
 
-  function fetch() {
-    axios(url)
+  const fetch = useCallback(() => {
+    axios(url, config)
       .then(response => {
         setState({error: undefined, response, isLoading: false});
       })
@@ -56,27 +54,23 @@ function useAPI(url, config = {}, initialFetch = true) {
           setState({error, response: undefined, isLoading: false});
         }
       });
-  }
+  }, [axios, url, config, setState]);
 
   useEffect(() => {
-    console.log('inside useEffect');
     setState({...state, isLoading: true});
-
-    if (initialFetch) {
-      fetch();
-    }
+    fetch();
   }, [url]);
 
   const {response, error, isLoading} = state;
 
-  function setData(newData) {
+  const setData = newData => {
     // Used to update state from component
     const newResponse = {...response, data: newData};
     setState({...state, response: newResponse});
-  }
+  };
 
   const data = response ? response.data : undefined;
   return {data, response, error, isLoading, setData, fetch};
-}
+};
 
-export default useAPI;
+export {useAPI};
