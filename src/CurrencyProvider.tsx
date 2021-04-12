@@ -1,7 +1,7 @@
 import React, {createContext, useState, useContext, Dispatch} from 'react';
 import {BaseCurrencies} from './utils/types';
 
-const INITIAL_STATE: CurrencyState = {base: 'EUR'};
+const INITIAL_STATE: CurrencyState = {base: 'EUR', setBase: () => null};
 
 interface CurrencyState {
   base: BaseCurrencies;

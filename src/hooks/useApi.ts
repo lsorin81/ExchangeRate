@@ -8,7 +8,7 @@ const useAPI = (url: string, config = {}) => {
     isLoading: true,
   });
 
-  const fetch = useCallback(() => {
+  const fetch = () => {
     axios(url, config)
       .then(response => {
         setState({error: undefined, response, isLoading: false});
@@ -20,7 +20,7 @@ const useAPI = (url: string, config = {}) => {
           setState({error, response: undefined, isLoading: false});
         }
       });
-  }, [axios, url, config, setState]);
+  };
 
   useEffect(() => {
     setState({...state, isLoading: true});

@@ -1,14 +1,28 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Alert, StyleSheet, Text, ScrollView} from 'react-native';
 import {useAPI} from '../hooks/useApi';
 import {CurrencyCell} from '../components/CurrencyCell';
 import {useCurrency} from '../CurrencyProvider';
+import {useInterval} from '../IntervalProvider';
 
 const HomeScreen = () => {
   const {base} = useCurrency();
-  const {data, error} = useAPI('http://api.exchangeratesapi.io/v1/latest', {
-    params: {access_key: '486c5e0ebcf24de7ae7165a59449d5e8', base},
-  });
+  const {interval} = useInterval();
+  const [repeatFetchId, setRepeatFetchId] = useState();
+  const {data, error, fetch} = useAPI(
+    'http://api.exchangeratesapi.io/v1/latest',
+    {
+      params: {access_key: '486c5e0ebcf24de7ae7165a59449d5e8', base},
+    },
+  );
+
+  useEffect(() => {
+    clearInterval(repeatFetchId);
+    const id = setInterval(() => {
+      fetch();
+    }, interval);
+    setRepeatFetchId(id);
+  }, [interval]);
 
   useEffect(() => {
     if (error) {

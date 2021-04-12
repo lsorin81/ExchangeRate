@@ -3,6 +3,7 @@ import {Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useCurrency} from '../CurrencyProvider';
+import {useInterval} from '../IntervalProvider';
 type DropDownElement = {
   label: string;
   value: string | number;
@@ -26,20 +27,20 @@ const baseCurrencies = [
 const refreshIntervals = [
   {
     label: '3 sec',
-    value: 3,
+    value: 3 * 1000,
   },
   {
     label: '5 sec',
-    value: 5,
+    value: 5 * 1000,
   },
   {
     label: '15 sec',
-    value: 15,
+    value: 15 * 1000,
   },
 ];
 const SettingsScreen = () => {
   const {base, setBase} = useCurrency();
-  const [refreshInterval, setRefreshInterval] = useState<number>();
+  const {interval, setInterval} = useInterval();
   return (
     <SafeAreaView>
       <Text>SettingsScreen</Text>
@@ -58,14 +59,14 @@ const SettingsScreen = () => {
       <Text>Pick the refresh interval:</Text>
       <DropDownPicker
         items={refreshIntervals}
-        defaultValue={refreshInterval}
+        defaultValue={interval}
         containerStyle={{height: 40}}
         style={{backgroundColor: '#fafafa'}}
         itemStyle={{
           justifyContent: 'flex-start',
         }}
         dropDownStyle={{backgroundColor: '#fafafa'}}
-        onChangeItem={(item: DropDownElement) => setRefreshInterval(item.value)}
+        onChangeItem={(item: DropDownElement) => setInterval(item.value)}
       />
     </SafeAreaView>
   );

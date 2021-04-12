@@ -10,19 +10,22 @@ import {HomeScreen} from './Home/HomeScreen';
 import {HistoryScreen} from './History/HistoryScreen';
 import {SettingsScreen} from './Settings/SettingsScreen';
 import {CurrencyProvider} from './CurrencyProvider';
+import {IntervalProvider} from './IntervalProvider';
 
 const Tab = createBottomTabNavigator();
 
 const App = () => {
   return (
     <CurrencyProvider>
-      <NavigationContainer>
-        <Tab.Navigator>
-          <Tab.Screen name="Home" component={HomeScreen} />
-          <Tab.Screen name="History" component={HistoryScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
-        </Tab.Navigator>
-      </NavigationContainer>
+      <IntervalProvider>
+        <NavigationContainer>
+          <Tab.Navigator>
+            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="History" component={HistoryScreen} />
+            <Tab.Screen name="Settings" component={SettingsScreen} />
+          </Tab.Navigator>
+        </NavigationContainer>
+      </IntervalProvider>
     </CurrencyProvider>
   );
 };
