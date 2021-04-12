@@ -2,8 +2,7 @@ import React, {useState} from 'react';
 import {Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DropDownPicker from 'react-native-dropdown-picker';
-import {BaseCurrencies} from '../utils/types';
-
+import {useCurrency} from '../CurrencyProvider';
 type DropDownElement = {
   label: string;
   value: string | number;
@@ -39,7 +38,7 @@ const refreshIntervals = [
   },
 ];
 const SettingsScreen = () => {
-  const [baseCurrency, setBaseCurrency] = useState<BaseCurrencies>('');
+  const {base, setBase} = useCurrency();
   const [refreshInterval, setRefreshInterval] = useState<number>();
   return (
     <SafeAreaView>
@@ -47,14 +46,14 @@ const SettingsScreen = () => {
       <Text>Pick the base currency:</Text>
       <DropDownPicker
         items={baseCurrencies}
-        defaultValue={baseCurrency}
+        defaultValue={base}
         containerStyle={{height: 40}}
         style={{backgroundColor: '#fafafa'}}
         itemStyle={{
           justifyContent: 'flex-start',
         }}
         dropDownStyle={{backgroundColor: '#fafafa'}}
-        onChangeItem={(item: DropDownElement) => setBaseCurrency(item.value)}
+        onChangeItem={(item: DropDownElement) => setBase(item.value)}
       />
       <Text>Pick the refresh interval:</Text>
       <DropDownPicker

@@ -1,2 +1,3 @@
 http://api.exchangeratesapi.io/v1/latest
 ?access_key=486c5e0ebcf24de7ae7165a59449d5e8
+&base=EUR
