@@ -3,7 +3,9 @@ import {Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {useCurrency} from '../CurrencyProvider';
-import {useInterval} from '../IntervalProvider';
+import {useRefreshInterval} from '../IntervalProvider';
+import {Header} from '../components/Header';
+
 type DropDownElement = {
   label: string;
   value: string | number;
@@ -40,33 +42,35 @@ const refreshIntervals = [
 ];
 const SettingsScreen = () => {
   const {base, setBase} = useCurrency();
-  const {interval, setInterval} = useInterval();
+  const {refreshInterval, setRefreshInterval} = useRefreshInterval();
   return (
     <SafeAreaView>
-      <Text>SettingsScreen</Text>
-      <Text>Pick the base currency:</Text>
+      <Header title="Settings" />
+      <Text style={{padding: 16}}>Pick the base currency:</Text>
       <DropDownPicker
         items={baseCurrencies}
         defaultValue={base}
         containerStyle={{height: 40}}
-        style={{backgroundColor: '#fafafa'}}
+        style={{backgroundColor: '#fafafa', marginHorizontal: 16}}
         itemStyle={{
           justifyContent: 'flex-start',
         }}
-        dropDownStyle={{backgroundColor: '#fafafa'}}
+        dropDownStyle={{backgroundColor: '#fafafa', padding: 16}}
         onChangeItem={(item: DropDownElement) => setBase(item.value)}
       />
-      <Text>Pick the refresh interval:</Text>
+      <Text style={{marginTop: 128, padding: 16}}>
+        Pick the refresh interval:
+      </Text>
       <DropDownPicker
         items={refreshIntervals}
-        defaultValue={interval}
+        defaultValue={refreshInterval}
         containerStyle={{height: 40}}
-        style={{backgroundColor: '#fafafa'}}
+        style={{backgroundColor: '#fafafa', marginHorizontal: 16}}
         itemStyle={{
           justifyContent: 'flex-start',
         }}
-        dropDownStyle={{backgroundColor: '#fafafa'}}
-        onChangeItem={(item: DropDownElement) => setInterval(item.value)}
+        dropDownStyle={{backgroundColor: '#fafafa', padding: 16}}
+        onChangeItem={(item: DropDownElement) => setRefreshInterval(item.value)}
       />
     </SafeAreaView>
   );

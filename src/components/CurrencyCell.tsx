@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text} from 'react-native';
+import {View, Text} from 'react-native';
 
 type CurrencyCell = {
   key: string;
@@ -10,10 +10,16 @@ type CurrencyCell = {
 
 const CurrencyCell = ({currency, value, index}: CurrencyCell) => {
   return (
-    <Text style={{backgroundColor: index % 2 === 0 ? 'gray' : 'white'}}>
-      {currency}
-      {value}
-    </Text>
+    <View
+      style={{
+        padding: 16,
+        backgroundColor: index % 2 === 0 ? '#fafafa' : 'white',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+      }}>
+      <Text>{currency}</Text>
+      <Text>{value}</Text>
+    </View>
   );
 };
 

@@ -1,29 +1,42 @@
-import React, {useEffect, useState} from 'react';
-import {SafeAreaView, Alert, StyleSheet, Text, ScrollView} from 'react-native';
-import {useAPI} from '../hooks/useApi';
+import {useFocusEffect} from '@react-navigation/native';
+import React, {useEffect} from 'react';
+import {
+  View,
+  ActivityIndicator,
+  Alert,
+  SafeAreaView,
+  Text,
+  ScrollView,
+  StyleSheet,
+} from 'react-native';
 import {CurrencyCell} from '../components/CurrencyCell';
+import {Header} from '../components/Header';
 import {useCurrency} from '../CurrencyProvider';
-import {useInterval} from '../IntervalProvider';
+import {useAPI} from '../hooks/useApi';
+import {useRefreshInterval} from '../IntervalProvider';
 
 const HomeScreen = () => {
   const {base} = useCurrency();
-  const {interval} = useInterval();
-  const [repeatFetchId, setRepeatFetchId] = useState();
-  const {data, error, fetch} = useAPI(
+  const {refreshInterval} = useRefreshInterval();
+
+  const {data, error, fetch, isLoading} = useAPI(
     'http://api.exchangeratesapi.io/v1/latest',
     {
       params: {access_key: '486c5e0ebcf24de7ae7165a59449d5e8', base},
     },
   );
 
-  useEffect(() => {
-    clearInterval(repeatFetchId);
-    const id = setInterval(() => {
-      fetch();
-    }, interval);
-    setRepeatFetchId(id);
-  }, [interval]);
+  // effect from react-navigation library for handling screen focus
+  useFocusEffect(
+    React.useCallback(() => {
+      const id = setInterval(() => {
+        fetch();
+      }, refreshInterval);
+      return () => clearInterval(id);
+    }, [refreshInterval]),
+  );
 
+  // generic error handling
   useEffect(() => {
     if (error) {
       Alert.alert(
@@ -35,16 +48,24 @@ const HomeScreen = () => {
   return (
     <SafeAreaView>
       <ScrollView>
-        {data
-          ? Object.keys(data.rates).map((item, index) => (
+        <Header title={`1 ${base} is:`} />
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : data ? (
+          <View>
+            <Text style={{padding: 16, color: 'gray'}}>
+              {new Date(data.timestamp).toLocaleTimeString()}
+            </Text>
+            {Object.keys(data.rates).map((item, index) => (
               <CurrencyCell
                 key={item}
                 index={index}
                 currency={item}
                 value={data.rates[item] as number}
               />
-            ))
-          : null}
+            ))}
+          </View>
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );

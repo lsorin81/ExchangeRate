@@ -1,22 +1,24 @@
 import React, {createContext, useState, useContext} from 'react';
 
 const INITIAL_STATE: IntervalState = {
-  interval: 15 * 1000,
-  setInterval: () => null,
+  refreshInterval: 15 * 1000,
+  setRefreshInterval: () => null,
 };
 
 interface IntervalState {
-  interval: number;
-  setInterval: () => void;
+  refreshInterval: number;
+  setRefreshInterval: () => void;
 }
 
 export const IntervalContext = createContext(INITIAL_STATE);
 export const IntervalProvider = ({children}: any) => {
-  const [interval, setInterval] = useState<number>(INITIAL_STATE.interval);
+  const [refreshInterval, setRefreshInterval] = useState<number>(
+    INITIAL_STATE.refreshInterval,
+  );
   return (
-    <IntervalContext.Provider value={{interval, setInterval}}>
+    <IntervalContext.Provider value={{refreshInterval, setRefreshInterval}}>
       {children}
     </IntervalContext.Provider>
   );
 };
-export const useInterval = () => useContext(IntervalContext);
+export const useRefreshInterval = () => useContext(IntervalContext);

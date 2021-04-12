@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
+import {Header} from '../components/Header';
 
 const HistoryScreen = () => {
   return (
-    <SafeAreaView>
-      <Text>HistoryScreen</Text>
+    <SafeAreaView style={{padding: 16}}>
+      <Header title="History api not included in free plan" />
     </SafeAreaView>
   );
 };

@@ -9,6 +9,7 @@ const useAPI = (url: string, config = {}) => {
   });
 
   const fetch = () => {
+    setState({...state, isLoading: true});
     axios(url, config)
       .then(response => {
         setState({error: undefined, response, isLoading: false});
@@ -22,8 +23,8 @@ const useAPI = (url: string, config = {}) => {
       });
   };
 
+  // effect for refetching data when url or param change
   useEffect(() => {
-    setState({...state, isLoading: true});
     fetch();
   }, [url, config?.params?.base]);
 
